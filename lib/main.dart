@@ -1,11 +1,37 @@
+import 'package:first_app/answer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
+import './question.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  var _questionIndex = 0;
+  var _questionAnswerMap = [
+    {
+      "question": "What is your favorite color",
+      "answers": ["Black", "White", "Green", "Red"]
+    },
+    {
+      "question": "What is your favorite language",
+      "answers": ["C#", "Dart", "F#", "Kotlin"]
+    }
+  ];
+  void _answerQuestion() {
+    setState(() {
+      _questionIndex += 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,21 +41,11 @@ class MyApp extends StatelessWidget {
         ),
         body: Column(
           children: <Widget>[
-            Text("This is the question"),
-            RaisedButton(
-              child: Text("Answer 1"),
-              onPressed: () => print("Answer 1 chosen"),
-            ),
-            RaisedButton(
-              child: Text("Answer 2"),
-              onPressed: () {
-                print("Answer 2 chosen");
-              },
-            ),
-            RaisedButton(
-              child: Text("Answer 3"),
-              onPressed: () => print("Answer 3 chosen"),
-            ),
+            Question(_questionAnswerMap[_questionIndex]["question"]),
+            ...(_questionAnswerMap[_questionIndex]["answers"] as List<String>)
+                .map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList(),
           ],
         ),
       ),
